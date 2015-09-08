@@ -5,6 +5,7 @@ describe Board do
 
   let(:ship){double(:ship, size: 2, location: "A1", orientation: "H")}
   let(:ship2){double(:ship, size: 2, location: "A2", orientation: "V")}
+  let(:ship3){double(:ship, size: 1, location: "B2", orientation: "V")}
   let(:ship_big){double(:ship_big, size: 3, location: "A1", orientation: "H")}
   let(:ship_out){double(:ship_out, size: 1, location: "A3", orientation: "H")}
   let(:ship_off){double(:ship_off, size: 2, location: "A2", orientation: "H")}
@@ -53,22 +54,41 @@ describe Board do
   end
 
   it "we would expect to register a hit if the shot hits part of a boat" do
-  subject.ship_place(ship)
-  expect{subject.shoot("A1")}.to output("Hit!").to_stdout
+    allow(ship).to receive(:class) {Ship}
+    allow(ship).to receive(:health) {1}
+    allow(ship).to receive(:hit) {nil}
+    subject.ship_place(ship)
+    expect{subject.shoot("A1")}.to output("Hit!\n").to_stdout
   end
 
   it "we would expect to register a miss if the shot hits part of a boat" do
-  subject.ship_place(ship)
-  expect{subject.shoot("B2")}.to output("Miss!").to_stdout
+    allow(ship).to receive(:class) {Ship}
+    allow(ship).to receive(:health) {1}
+    allow(ship).to receive(:hit) {nil}
+    subject.ship_place(ship)
+    expect{subject.shoot("B2")}.to output("Miss!\n").to_stdout
   end
 
   it "we would like to know when we have sunk an opponent's ship" do
+    allow(ship).to receive(:class) {Ship}
+    allow(ship).to receive(:health) {1}
     subject.ship_place(ship)
+    allow(ship).to receive(:hit) {nil}
     subject.shoot("A2")
-    expect{subject.shoot("A1")}.to output("You have sunk my ship").to_stdout
+    allow(ship).to receive(:hit) {puts "You have sunk my ship"}
+    expect{subject.shoot("A1")}.to output("Hit!\nYou have sunk my ship\n").to_stdout
   end
 
-
+  it "tells you when you have won" do
+    subject.ship_place(ship)
+    subject.ship_place(ship3)
+    allow(ship).to receive(:health) {0}
+    allow(ship).to receive(:class) {Ship}
+    allow(ship3).to receive(:health) {0}
+    allow(ship3).to receive(:class) {Ship}
+    allow(ship3).to receive(:hit) {puts "You have sunk my ship"}
+    expect{ subject.shoot("B2") }.to output("Hit!\nYou have sunk my ship\nCongratulations! You have won the game!\n").to_stdout
+  end
 
 
 end

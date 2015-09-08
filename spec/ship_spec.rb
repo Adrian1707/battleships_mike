@@ -30,4 +30,16 @@ describe Ship  do
     expect(ship.orientation).to eq :orientation
   end
 
+  it 'reduces in health by one with each hit' do
+    ship = Ship.new(2, :location, :orientation)
+    ship.hit
+    expect(ship.health).to eq 1
+  end
+
+  it 'tells us when the ship has been sunk' do
+    ship = Ship.new(2, :location, :orientation)
+    ship.hit
+    expect{ ship.hit }.to output("You have sunk my ship\n").to_stdout
+  end
+
 end

@@ -28,14 +28,28 @@ class Board
   def shoot(shot)
     i = map.index(shot)
     if ocean[i] != map[i]
-      print "Hit!"
+      puts "Hit!"
+      ocean[i].hit
+      puts "Congratulations! You have won the game!" if winner?
     else
-      print "Miss!"
+      puts "Miss!"
     end
 
   end
 
   private
+
+
+  def winner?
+    ocean.select{ |s| s.class == Ship }.each do |s|
+      if s.health > 0
+        return false
+      end
+    end
+    return true
+  end
+
+
 
   def onboard_fail(ship)
     board_width = ocean.count**0.5
@@ -64,7 +78,5 @@ class Board
     end
 
   end
-
-
 
 end
