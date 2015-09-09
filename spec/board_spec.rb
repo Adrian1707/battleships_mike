@@ -6,17 +6,21 @@ describe Board do
   let(:ship){double(:ship, size: 2, location: "A1", orientation: "H")}
   let(:ship2){double(:ship, size: 2, location: "A2", orientation: "V")}
   let(:ship3){double(:ship, size: 1, location: "B2", orientation: "V")}
-  let(:ship_big){double(:ship_big, size: 3, location: "A1", orientation: "H")}
-  let(:ship_out){double(:ship_out, size: 1, location: "A3", orientation: "H")}
-  let(:ship_off){double(:ship_off, size: 2, location: "A2", orientation: "H")}
+  let(:ship_big){double(:ship_big, size: 11, location: "A1", orientation: "H")}
+  let(:ship_out){double(:ship_out, size: 1, location: "A13", orientation: "H")}
+  let(:ship_off){double(:ship_off, size: 5, location: "C7", orientation: "H")}
 
 
-  it 'is created with an array(ocean)' do
-    is_expected.to respond_to :ocean
-  end
+  describe '#initialize' do
 
-  it 'ocean returns an array of length 4' do
-    expect(subject.ocean.count).to eq 4
+    it 'is created with an array(ocean)' do
+      is_expected.to respond_to :ocean
+    end
+
+    it 'initializes with a 10x10 board' do
+      expect(subject.ocean.count).to eq (10**2)
+    end
+
   end
 
   it 'responds to ship_place method with 1 (i.e. the ship) arguments' do
@@ -25,10 +29,10 @@ describe Board do
 
   it 'we would expect to see the ship in the ocean' do
     subject.ship_place(ship)
-    expect(subject.ocean).to eq [ship,ship,"B1","B2"]
+    expect( [subject.ocean[0], subject.ocean[1]] ).to eq [ship,ship]
   end
 
-  it 'raises an error if ship is too big (size 3) for the board' do
+  it 'raises an error if ship is too big (size 11) for the board' do
     expect{ subject.ship_place(ship_big) }.to raise_error "Your ship is too big"
   end
 
