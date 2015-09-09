@@ -1,12 +1,11 @@
 class Board
 
-"Mike Test 2"
-
-  attr_reader :ocean, :map
+  attr_reader :ocean, :map, :hits
 
   def initialize
     @ocean = ["A1","A2","B1","B2"]
     @map =  ["A1","A2","B1","B2"]
+    @hits = []
   end
 
   def ship_place(ship)
@@ -28,10 +27,12 @@ class Board
   end
 
   def shoot(shot)
+    fail "You've already hit this target" if @hits.include? shot
     i = map.index(shot)
     if ocean[i] != map[i]
       puts "Hit!"
       ocean[i].hit
+      @hits << shot
       puts "Congratulations! You have won the game!" if winner?
     else
       puts "Miss!"

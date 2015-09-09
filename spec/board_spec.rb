@@ -45,12 +45,25 @@ describe Board do
     expect{ subject.ship_place(ship2) }.to raise_error "You cannot place your ship on top of another ship"
   end
 
-  it "we would like to be able to fire a shot" do
-    is_expected.to respond_to :shoot
-  end
+  describe '#shoot' do
 
-  it "we would like the shot to have a coordinate" do
-    expect(subject).to respond_to(:shoot).with(1).argument
+    it "we would like to be able to fire a shot" do
+      is_expected.to respond_to :shoot
+    end
+
+    it "we would like the shot to have a coordinate" do
+      expect(subject).to respond_to(:shoot).with(1).argument
+    end
+
+    it 'raise an error if coordinate is hit twice' do
+      subject.ship_place(ship)
+      allow(ship).to receive(:hit)
+      allow(ship).to receive(:health)
+      subject.shoot("A1")
+      expect{subject.shoot("A1")}.to raise_error "You've already hit this target"
+    end
+
+
   end
 
   it "we would expect to register a hit if the shot hits part of a boat" do
