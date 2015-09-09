@@ -55,14 +55,21 @@ describe Board do
       expect(subject).to respond_to(:shoot).with(1).argument
     end
 
-    it 'raise an error if coordinate is hit twice' do
+    it 'raise an error if coordinate containing ship is hit twice' do
+      subject.ship_place(ship)
+      allow(ship).to receive(:hit)
+      allow(ship).to receive(:health)
+      subject.shoot("B1")
+      expect{subject.shoot("B1")}.to raise_error "You've already hit this empty spot"
+    end
+
+    it 'raise an error if coordinate not contaning ship is hit twice' do
       subject.ship_place(ship)
       allow(ship).to receive(:hit)
       allow(ship).to receive(:health)
       subject.shoot("A1")
       expect{subject.shoot("A1")}.to raise_error "You've already hit this target"
     end
-
 
   end
 
