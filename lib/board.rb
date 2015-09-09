@@ -1,6 +1,6 @@
 class Board
 
-"Adrian test1"
+"Michael test1"
 
   attr_reader :ocean, :map
 
