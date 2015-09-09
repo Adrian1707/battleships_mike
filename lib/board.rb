@@ -1,5 +1,7 @@
 class Board
 
+"Adrian test"
+
   attr_reader :ocean, :map
 
   def initialize
