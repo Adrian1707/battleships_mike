@@ -32,11 +32,12 @@ class Board
   def ship_place(ship)
     onboard_fail(ship)
     overlap_fail(ship)
-    board_width = (ocean.count**0.5).to_i
-    i = map.index(ship.location)
+    board_width = (ocean.count**0.5).to_i #board_width will always be square root of board size as it's a square
+    i = map.index(ship.location) #find the index of the map array that contains the ships location. So is location is A1, i = 0
     n = 1
-    ocean[i] = ship
-    while n < ship.size
+    ocean[i] = ship #we place the ship here in the ocean at the index where the ship position was stated. Place on ocean for now, then compare with map later on for overlaps
+                    #Also comparing map and ocean to see if there's a hit. If ocean[i] != map[i]
+     while n < ship.size
       if ship.orientation.downcase == "v"
         i += board_width
         ocean[i] = ship
@@ -46,13 +47,13 @@ class Board
       end
       n += 1
     end
-  end
+  en
 
   def shoot(shot)
     fail "You've already hit this target" if @hits.include? shot
     fail "You've already hit this empty spot" if @misses.include? shot
     i = map.index(shot)
-    if ocean[i] != map[i]
+    if ocean[i] != map[i] #is ocean[i] does not contain the same value as map[i], a ship must be placed in ocean, so its a hit
       puts "Hit!"
       ocean[i].hit
       @hits << shot
@@ -66,15 +67,15 @@ class Board
 
   private
 
-
-  def winner?
-    ocean.select{ |s| s.class == Ship }.each do |s|
-      if s.health > 0
-        return false
-      end
-    end
-    return true
-  end
+  #
+  # def winner?
+  #   ocean.select{ |s| s.class == Ship }.each do |s|
+  #     if s.health > 0
+  #       return false
+  #     end
+  #   end
+  #   return true
+  # end
 
 
 
